@@ -1,0 +1,17 @@
+version: '3'
+services:
+    jenkins:
+        build: ./jenkins
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            # - ./pipeline:/pipeline-dev
+            - ./plugins:/var/jenkins_home/plugins
+            - ./workspace:/var/jenkins_home/jobs/test/workspace
+        environment:
+            JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+        ports:
+            - "18080:8080"
+    nexus:
+        image: sonatype/nexus
+        ports:
+            - "18081:8081"

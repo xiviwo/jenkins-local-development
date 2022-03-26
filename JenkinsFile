@@ -1,0 +1,20 @@
+// library identifier: 'local-lib@master', // The identifier doesn't matter
+// 		retriever: modernSCM([$class: 'GitSCMSource', remote: "./library"]), // Here we load the library from disk
+// 		changelog: false // We don't want to see the changelog of the fake repository
+
+node(){
+
+    withEnv(['FName=Naive','LName=skill']) {
+        stage('Build') {
+            sh 'echo $FName $LName'
+            sh("pwd;ls;id")
+            sh("docker images")
+        }
+    }
+    stage("docker") {
+        docker.image('ansible:latest').inside {
+        sh 'ansible -v'
+        }
+
+    }
+}
