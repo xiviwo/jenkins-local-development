@@ -3,17 +3,17 @@ library identifier: 'jenkins-shared-library@main',
         retriever: modernSCM(
         [$class: 'GitSCMSource',
         //remote: 'https://github.com/xiviwo/jenkins-shared-library.git',
-        remote: 'file:///var/jenkins_home/jobs/test/workspace/jenkins-shared-library',
-        credentialsId: 'my-github'
+        remote: '/var/jenkins_home/jobs/test/workspace/jenkins-shared-library',
         ])
 
+// runAnsible()
 node(){
 
     withEnv(['FName=Naive','LName=skill']) {
         stage('Build') {
             sh 'echo $FName $LName'
             sh("pwd;hostname;id")
-            // sh("docker images")
+            sh("ls /var/jenkins_home/jobs")
             log.info 'test'
         }
     }
