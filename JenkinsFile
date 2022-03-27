@@ -1,11 +1,9 @@
-// library(identifier: 'jenkins-shared-library@main', // The identifier doesn't matter
-// 		retriever: modernSCM([$class: 'GitSCMSource', remote: "https://github.com/xiviwo/jenkins-shared-library.git"]), // Here we load the library from disk
-// 		changelog: false) // We don't want to see the changelog of the fake repository
-// //@Library('jenkins-shared-library@master') _
+
 library identifier: 'jenkins-shared-library@main', 
         retriever: modernSCM(
         [$class: 'GitSCMSource',
-        remote: 'https://github.com/xiviwo/jenkins-shared-library.git',
+        //remote: 'https://github.com/xiviwo/jenkins-shared-library.git',
+        remote: 'file:///var/jenkins_home/jobs/test/workspace/jenkins-shared-library',
         credentialsId: 'my-github'
         ])
 
@@ -14,30 +12,13 @@ node(){
     withEnv(['FName=Naive','LName=skill']) {
         stage('Build') {
             sh 'echo $FName $LName'
-            sh("pwd;ls;id")
+            sh("pwd;hostname;id")
             // sh("docker images")
-            test.info 'test'
+            log.info 'test'
         }
     }
 
     stage("docker") {
-        docker.image('ansible:latest').inside {
-
-            sh('ansible --version')
-            //sh('git clone https://github.com/adithyakhamithkar/ansible-playbooks.git')
-            // sh("rm -rf ansible-playbooks")
-            git url: "https://github.com/adithyakhamithkar/ansible-playbooks.git"
-            sh("ls;pwd")
-            ansiColor('xterm') {
-                ansiblePlaybook(
-                    playbook: 'simple.yml',
-                    limit: '127.0.0.1',
-                    inventory: '127.0.0.1,',
-                    extras: ' --connection=local -e "process=bash"',
-                    colorized: true
-                )
-            }
-        }
-
+        runAnsible()
     }
 }
